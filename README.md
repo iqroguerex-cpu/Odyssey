@@ -19,11 +19,16 @@ A modern web application that helps students learn through AI-generated quizzes 
 ### 3. Credit System ⚡
 - **Free Trial:** 20 credits on first use
 - Purchase credit packs:
-  - Starter Pack: 50 credits - $4.99
-  - Value Pack: 150 credits - $12.99 (Most Popular)
-  - Premium Pack: 300 credits - $24.99
+  - Starter Pack: 50 credits - ₹30
+  - Value Pack: 150 credits - ₹80 (Most Popular)
+  - Premium Pack: 300 credits - ₹150
+  - Ultimate Pack: 3000 credits - ₹1000
 - Track usage history
 - Session-based user management
+
+### 4. Odyssey AI
+- Ask Anything.
+- **Cost:** Currently Free.
 
 ## Setup Instructions 🛠️
 
