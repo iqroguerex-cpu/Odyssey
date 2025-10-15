@@ -59,74 +59,59 @@
     
     <script>
         const copyBtn = document.getElementById('copy-btn');
-        const pdfBtn = document.getElementById('download-pdf-btn');
-        const wordBtn = document.getElementById('download-word-btn');
-        const summaryContent = document.querySelector('.summary-content');
+const pdfBtn = document.getElementById('download-pdf-btn');
+const summaryContent = document.querySelector('.summary-content');
 
-        copyBtn.addEventListener('click', () => { /* ... copy function is unchanged ... */ });
+// --- Copy to Clipboard ---
+copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(summaryContent.innerText).then(() => {
+        alert('Summary copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+});
 
-        // --- ✨ THIS IS THE CORRECTED PDF DOWNLOAD LOGIC ---
-        pdfBtn.addEventListener('click', () => {
-            const originalText = pdfBtn.innerHTML;
-            pdfBtn.innerHTML = '📄 Downloading...';
-            pdfBtn.disabled = true;
+// --- PDF Download ---
+pdfBtn.addEventListener('click', () => {
+    const originalText = pdfBtn.innerHTML;
+    pdfBtn.innerHTML = '📄 Downloading...';
+    pdfBtn.disabled = true;
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-            
-            // Get the text content
-            const summaryText = summaryContent.innerText;
-            
-            // Define margins and page dimensions
-            const margin = 15;
-            const pageHeight = doc.internal.pageSize.getHeight();
-            const usableWidth = doc.internal.pageSize.getWidth() - (margin * 2);
-            
-            // Split the text into lines that fit the page width
-            const lines = doc.splitTextToSize(summaryText, usableWidth);
-            
-            let cursorY = margin; // Start the cursor at the top margin
-            const lineHeight = 7; // Approximate height of a line in mm
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+    
+    // Get the text content
+    const summaryText = summaryContent.innerText;
+    
+    // Define margins and page dimensions
+    const margin = 15;
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const usableWidth = doc.internal.pageSize.getWidth() - (margin * 2);
+    
+    // Split the text into lines that fit the page width
+    const lines = doc.splitTextToSize(summaryText, usableWidth);
+    
+    let cursorY = margin; // Start the cursor at the top margin
+    const lineHeight = 7; // Approximate height of a line in mm
 
-            // Loop through each line
-            lines.forEach(line => {
-                // Check if adding the next line would go off the page
-                if (cursorY + lineHeight > pageHeight - margin) {
-                    doc.addPage();       // Add a new page
-                    cursorY = margin;    // Reset the cursor to the top margin
-                }
-                
-                doc.text(line, margin, cursorY); // Add the line of text
-                cursorY += lineHeight;           // Move the cursor down for the next line
-            });
-
-            doc.save('summary.pdf');
-
-            pdfBtn.innerHTML = originalText;
-            pdfBtn.disabled = false;
-        });
+    // Loop through each line
+    lines.forEach(line => {
+        // Check if adding the next line would go off the page
+        if (cursorY + lineHeight > pageHeight - margin) {
+            doc.addPage();       // Add a new page
+            cursorY = margin;    // Reset the cursor to the top margin
+        }
         
-        wordBtn.addEventListener('click', () => { /* ... word function is unchanged ... */ });
+        doc.text(line, margin, cursorY); // Add the line of text
+        cursorY += lineHeight;           // Move the cursor down for the next line
+    });
 
-        // Full functions for completeness
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(summaryContent.innerText).then(() => {
-                alert('Summary copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-            });
-        });
+    doc.save('summary.pdf');
 
-        wordBtn.addEventListener('click', () => {
-            const originalText = wordBtn.innerHTML;
-            wordBtn.innerHTML = '💾 Downloading...';
-            wordBtn.disabled = true;
-            const content = `<!DOCTYPE html><html><head><title>Summary</title></head><body>${summaryContent.innerHTML}</body></html>`;
-            const blob = htmlToDocx.asBlob(content);
-            saveAs(blob, 'summary.docx');
-            wordBtn.innerHTML = originalText;
-            wordBtn.disabled = false;
-        });
+    pdfBtn.innerHTML = originalText;
+    pdfBtn.disabled = false;
+});
+
     </script>
 </body>
 </html>
