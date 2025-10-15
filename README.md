@@ -30,6 +30,8 @@ A modern web application that helps students learn through AI-generated quizzes 
 - Ask Anything.
 - **Cost:** Currently Free.
 
+##Live At : https://odyssey-kw11.onrender.com
+
 ## Setup Instructions 🛠️
 
 ### Prerequisites
