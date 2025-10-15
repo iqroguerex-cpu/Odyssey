@@ -2,6 +2,8 @@
 
 A modern web application that helps students learn through AI-generated quizzes and document summaries.
 
+[![Live Site](https://img.shields.io/badge/Live%20Demo-Visit-brightgreen?style=for-the-badge)](https://odyssey-kw11.onrender.com)
+
 ## Features ✨
 
 ### 1. MCQ Generator 📝
@@ -29,8 +31,6 @@ A modern web application that helps students learn through AI-generated quizzes 
 ### 4. Odyssey AI
 - Ask Anything.
 - **Cost:** Currently Free.
-
-[![Live Site](https://img.shields.io/badge/Live%20Demo-Visit-brightgreen)](https://odyssey-kw11.onrender.com)
 
 ## Setup Instructions 🛠️
 
