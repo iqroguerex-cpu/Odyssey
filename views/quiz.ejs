@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take the Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+
+        .credits-badge {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            color: #667eea;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.6s ease;
+        }
+
+        form {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .question-block {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .question-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        h3 {
+            color: #2d3748;
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            font-weight: 600;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+            transform: translateX(5px);
+        }
+
+        .option:has(input:checked) {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        label {
+            cursor: pointer;
+            color: #4a5568;
+            font-size: 1rem;
+            flex: 1;
+        }
+
+        hr {
+            display: none;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .credits-badge {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            form {
+                padding: 1.5rem;
+                border-radius: 15px;
+            }
+
+            .question-block {
+                padding: 1rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            .option {
+                padding: 0.75rem;
+            }
+
+            label {
+                font-size: 0.95rem;
+            }
+
+            button[type="submit"] {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <% if (typeof credits !== 'undefined') { %>
+    <div class="credits-badge">
+        ⚡ <%= credits %> Credits
+    </div>
+    <% } %>
+    
+    <div class="container">
+        <h1>Your Generated Quiz</h1>
+        <form action="/submit-quiz" method="post">
+            <% quiz.forEach((item, index) => { %>
+                <div class="question-block">
+                    <h3><%= (index + 1) %>. <%= item.question %></h3>
+                    <div class="options">
+                        <% item.options.forEach((option, optionIndex) => { %>
+                            <div class="option">
+                                <input type="radio" name="question-<%= index %>" id="q<%= index %>-option<%= optionIndex %>" value="<%= optionIndex %>" required>
+                                <label for="q<%= index %>-option<%= optionIndex %>"><%= option %></label>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% }); %>
+            <button type="submit">Submit Quiz</button>
+        </form>
+    </div>
+</body>
+</html>

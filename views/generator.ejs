@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Generator - Odyssey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-primary: #667eea;
+            --accent-secondary: #764ba2;
+            --nav-bg: rgba(15, 23, 42, 0.8);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --hover-bg: rgba(102, 126, 234, 0.1);
+        }
+
+        body.light-theme {
+            --bg-gradient-start: #f8fafc;
+            --bg-gradient-end: #e0e7ff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(102, 126, 234, 0.2);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --input-bg: rgba(248, 250, 252, 0.8);
+            --input-border: rgba(102, 126, 234, 0.2);
+            --hover-bg: rgba(102, 126, 234, 0.08);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: all 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Navigation */
+        .floating-nav {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            z-index: 1000;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .nav-brand h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a.active {
+            background: var(--hover-bg);
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--hover-bg);
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a.active::before {
+            width: 80%;
+        }
+
+        /* Theme Toggle */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 40px;
+            position: relative;
+            width: 70px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        body.light-theme .slider {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 32px;
+            left: 4px;
+            position: absolute;
+            transition: 0.4s;
+            width: 32px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .slider .icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            transition: opacity 0.3s;
+        }
+
+        .slider .moon {
+            left: 8px;
+            opacity: 1;
+        }
+
+        .slider .sun {
+            right: 8px;
+            opacity: 0.3;
+        }
+
+        body.light-theme .slider .moon {
+            opacity: 0.3;
+        }
+
+        body.light-theme .slider .sun {
+            opacity: 1;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+
+        .generator-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .generator-container h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .generator-container > p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Input Toggle Buttons */
+        .input-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 1rem;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .toggle-btn:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-primary);
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Input Areas */
+        .input-area {
+            position: relative;
+            min-height: 300px;
+            margin-bottom: 2rem;
+        }
+
+        .input-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .input-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* File Upload Area */
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            background: var(--input-bg);
+            border: 3px dashed var(--input-border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 2rem;
+        }
+
+        .file-upload-label:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-primary);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        #file-name-display {
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .file-upload-label:hover #file-name-display {
+            color: var(--text-primary);
+        }
+
+        /* Text Area */
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 1.5rem;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Options Area */
+        .options-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+        }
+
+        .options-area label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .options-area input[type="number"] {
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            width: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .options-area input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Generate Button */
+        .generate-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Error Message */
+        .error-message {
+            margin-top: 2rem;
+            padding: 1.25rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            color: #fca5a5;
+            font-weight: 500;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .floating-nav {
+                top: 1rem;
+                width: 95%;
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .content-wrapper {
+                padding: 12rem 1rem 2rem;
+            }
+
+            .generator-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .generator-container h1 {
+                font-size: 2rem;
+            }
+
+            .generator-container > p {
+                font-size: 1rem;
+            }
+
+            .input-toggle {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .input-area {
+                min-height: 250px;
+            }
+
+            .file-upload-label {
+                min-height: 250px;
+            }
+
+            textarea {
+                min-height: 250px;
+            }
+
+            .options-area {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .options-area input[type="number"] {
+                width: 100%;
+            }
+
+            .generate-btn {
+                font-size: 1.1rem;
+            }
+        }
+
+        .nav-brand a {
+            text-decoration: none; /* Removes the underline */
+            color: inherit;       /* Makes the link inherit the color of its parent */
+        }
+
+        .cost-info {
+            background: var(--hover-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .cost-info span {
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        /* Hide arrows from number input in WebKit browsers (Chrome, Safari, Edge) */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+    </style>
+</head>
+<body>
+    <nav class="floating-nav">
+        <div class="nav-brand">
+            <a href="/">
+                <h2>Odyssey ✨</h2>
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/summarizer">Precis</a></li>
+            <li><a href="/askyourpdf">Odyssey AI</a></li>
+        </ul>
+        <div class="credits-display" style="display: flex; align-items: center; gap: 1rem;">
+            <a href="/credits" style="text-decoration: none;">
+                <div style="padding: 0.5rem 1rem; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-radius: 20px; color: white; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; cursor: pointer;">
+                    <span>⚡</span>
+                    <span><%= typeof credits !== 'undefined' ? credits : '0' %> Credits</span>
+                </div>
+            </a>
+            <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="theme-toggle">
+                <input type="checkbox" id="theme-toggle" />
+                <div class="slider round">
+                    <span class="icon moon">🌙</span>
+                    <span class="icon sun">☀️</span>
+                </div>
+            </label>
+        </div>
+    </nav>
+
+    <main class="content-wrapper">
+        <div class="generator-container">
+            <h1>Quizify</h1>
+            <p>Create multiple-choice questions from your text or PDF documents instantly.</p>
+
+            <div class="cost-info">
+                💡 <span>Cost: 1 credits per Question Generated.</span>
+            </div>
+
+            <form action="/generate-quiz" method="POST" enctype="multipart/form-data" id="quiz-generator-form">
+                
+                <div class="input-toggle">
+                    <button type="button" id="file-btn" class="toggle-btn active">📄 Upload PDF</button>
+                    <button type="button" id="text-btn" class="toggle-btn">✍️ Text Input</button>
+                </div>
+
+                <div class="input-area">
+                    <div id="file-input-area" class="input-content active">
+                        <label for="pdf-upload" class="file-upload-label">
+                            <span class="upload-icon">📄</span>
+                            <span id="file-name-display">Click to upload or drag & drop a PDF</span>
+                        </label>
+                        <input type="file" id="pdf-upload" name="document" accept=".pdf" hidden>
+                    </div>
+
+                    <div id="text-input-area" class="input-content">
+                        <textarea name="text_input" placeholder="Paste your text here..."></textarea>
+                    </div>
+                </div>
+
+                <div class="options-area">
+                    <label for="num-questions">Number of Questions:</label>
+                    <input type="number" id="num-questions" name="num_questions" min="1" max="100" value="5">
+                </div>
+                
+                <button type="submit" class="generate-btn">
+                    ✨ Generate MCQs
+                </button>
+            </form>
+
+            <% if (locals.error) { %>
+                <div class="error-message">⚠️ <%= error %></div>
+            <% } %>
+        </div>
+    </main>
+
+    <script>
+        // --- Theme Toggle Functionality ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-theme');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // --- Input Type Toggle (Text/File) Functionality ---
+        const textBtn = document.getElementById('text-btn');
+        const fileBtn = document.getElementById('file-btn');
+        const textArea = document.getElementById('text-input-area');
+        const fileArea = document.getElementById('file-input-area');
+
+        textBtn.addEventListener('click', () => {
+            textBtn.classList.add('active');
+            fileBtn.classList.remove('active');
+            textArea.classList.add('active');
+            fileArea.classList.remove('active');
+        });
+
+        fileBtn.addEventListener('click', () => {
+            fileBtn.classList.add('active');
+            textBtn.classList.remove('active');
+            fileArea.classList.add('active');
+            textArea.classList.remove('active');
+        });
+
+        // --- File Name Display Functionality ---
+        const pdfUpload = document.getElementById('pdf-upload');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        
+        pdfUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                fileNameDisplay.textContent = `📎 ${file.name}`;
+            } else {
+                fileNameDisplay.textContent = 'Click to upload or drag & drop a PDF';
+            }
+        });
+
+        // --- Drag and Drop Functionality ---
+        const fileUploadLabel = document.querySelector('.file-upload-label');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileUploadLabel.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileUploadLabel.addEventListener(eventName, () => {
+                fileUploadLabel.style.borderColor = 'var(--accent-primary)';
+                fileUploadLabel.style.background = 'var(--hover-bg)';
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileUploadLabel.addEventListener(eventName, () => {
+                fileUploadLabel.style.borderColor = '';
+                fileUploadLabel.style.background = '';
+            });
+        });
+
+        fileUploadLabel.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                pdfUpload.files = files;
+                fileNameDisplay.textContent = `📎 ${files[0].name}`;
+            }
+        });
+    </script>
+</body>
+</html>

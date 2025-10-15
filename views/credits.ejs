@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credits - Odyssey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.credits-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 20px;
+    color: white;
+    font-weight: 600;
+}
+
+:root {
+    --bg-gradient-start: #0f172a;
+    --bg-gradient-end: #1e293b;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --accent-primary: #667eea;
+    --accent-secondary: #764ba2;
+    --nav-bg: rgba(15, 23, 42, 0.8);
+    /* I'm assuming you meant to have this from previous styles, re-adding for the nav hover effect */
+    --feature-bg: rgba(102, 126, 234, 0.1);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.floating-nav {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--card-border);
+    z-index: 1000;
+}
+
+.nav-brand h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-links a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    background: var(--feature-bg);
+}
+
+.nav-links a:hover::before {
+    width: 80%;
+}
+
+.content-wrapper {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 8rem 2rem 4rem;
+    z-index: 1;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.credits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.credit-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* --- THIS IS THE MODIFIED SECTION --- */
+.credit-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-primary); /* This line was added for the glow effect */
+    box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+}
+/* --- END OF MODIFICATION --- */
+
+.credit-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.credit-amount {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 1rem 0;
+}
+
+.credit-price {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.buy-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.buy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.popular {
+    position: relative;
+    border: 2px solid var(--accent-primary);
+}
+
+.popular::before {
+    content: '⭐ Most Popular';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.usage-history {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.usage-history h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    border-left: 3px solid var(--accent-primary);
+}
+
+.history-item.purchase {
+    border-left-color: #48bb78;
+}
+
+.history-info {
+    flex: 1;
+}
+
+.history-type {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.history-details {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.history-credits {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.history-credits.positive {
+    color: #48bb78;
+}
+
+.history-credits.negative {
+    color: #f56565;
+}
+
+.empty-history {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    transition: all 0.3s ease;
+}
+
+.back-link:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: var(--accent-primary);
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 12rem 1rem 2rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .credits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .floating-nav {
+        flex-wrap: wrap;
+        padding: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-links a {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+.nav-brand a {
+    text-decoration: none; /* Removes the underline */
+    color: inherit;       /* Makes the link inherit the color of its parent */
+}
+    </style>
+</head>
+<body>
+    <nav class="floating-nav">
+        <div class="nav-brand">
+            <a href="/">
+                <h2>Odyssey ✨</h2>
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/squiz">Quizify</a></li>
+            <li><a href="/summarizer" class="active">Precis</a></li>
+            <li><a href="/askyourpdf">Odyssey AI</a></li>
+        </ul>
+        <div class="credits-badge">
+            ⚡ <%= credits %> Credits
+        </div>
+    </nav>
+
+    <main class="content-wrapper">
+        <h1>Odyssey Credits (OC) 💰</h1>
+
+        <div class="credits-grid">
+            <div class="credit-card">
+                <h3>Starter Pack</h3>
+                <div class="credit-amount">50 OC</div>
+                <div class="credit-price">₹30</div>
+                <button class="buy-btn" onclick="purchaseCredits(50)">Buy Now</button>
+            </div>
+
+            <div class="credit-card popular">
+                <h3>Value Pack</h3>
+                <div class="credit-amount">150 OC</div>
+                <div class="credit-price">₹80</div>
+                <button class="buy-btn" onclick="purchaseCredits(150)">Buy Now</button>
+            </div>
+
+            <div class="credit-card">
+                <h3>Premium Pack</h3>
+                <div class="credit-amount">300 OC</div>
+                <div class="credit-price">₹150</div>
+                <button class="buy-btn" onclick="purchaseCredits(300)">Buy Now</button>
+            </div>
+
+            <div class="credit-card">
+                <h3>Ultimate Pack</h3>
+                <div class="credit-amount">3000 OC</div>
+                <div class="credit-price">₹1000</div>
+                <button class="buy-btn" onclick="purchaseCredits(3000)">Buy Now</button>
+            </div>
+        </div>
+
+        <div class="usage-history">
+            <h2>📊 Usage History</h2>
+            <% if (usageHistory && usageHistory.length > 0) { %>
+                <% usageHistory.slice(0, 10).forEach(item => { %>
+                    <div class="history-item <%= item.type.includes('Purchase') ? 'purchase' : '' %>">
+                        <div class="history-info">
+                            <div class="history-type"><%= item.type %></div>
+                            <div class="history-details">
+                                <%= item.details %> • <%= new Date(item.timestamp).toLocaleString() %>
+                            </div>
+                        </div>
+                        <div class="history-credits <%= item.type.includes('Purchase') ? 'positive' : 'negative' %>">
+                            <%= item.type.includes('Purchase') ? '+' : '-' %><%= Math.abs(item.credits) %>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="empty-history">
+                    <p>No usage history yet. Start using Odyssey to see your activity here!</p>
+                </div>
+            <% } %>
+        </div>
+
+        <center>
+            <a href="/" class="back-link">← Back to Dashboard</a>
+        </center>
+    </main>
+
+    <script>
+        function purchaseCredits(amount) {
+            if (confirm(`Purchase ${amount} credits? (This is a demo - no actual payment will be processed)`)) {
+                fetch('/purchase-credits', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ amount: amount })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Purchase failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred during purchase');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

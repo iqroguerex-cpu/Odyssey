@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odyssey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-primary: #667eea;
+            --accent-secondary: #764ba2;
+            --nav-bg: rgba(15, 23, 42, 0.8);
+            --feature-bg: rgba(102, 126, 234, 0.1);
+        }
+
+        body.light-theme {
+            --bg-gradient-start: #f8fafc;
+            --bg-gradient-end: #e0e7ff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(102, 126, 234, 0.2);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --feature-bg: rgba(102, 126, 234, 0.08);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: all 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating Navigation */
+        .floating-nav {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            z-index: 1000;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .nav-brand h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--feature-bg);
+        }
+
+        .nav-links a:hover::before {
+            width: 80%;
+        }
+
+        /* Theme Toggle */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 40px;
+            position: relative;
+            width: 70px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        body.light-theme .slider {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 32px;
+            left: 4px;
+            position: absolute;
+            transition: 0.4s;
+            width: 32px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .slider .icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            transition: opacity 0.3s;
+        }
+
+        .slider .moon {
+            left: 8px;
+            opacity: 1;
+        }
+
+        .slider .sun {
+            right: 8px;
+            opacity: 0.3;
+        }
+
+        body.light-theme .slider .moon {
+            opacity: 0.3;
+        }
+
+        body.light-theme .slider .sun {
+            opacity: 1;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-section h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero-section p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Feature Cards Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card .btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .floating-nav {
+                top: 1rem;
+                width: 95%;
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .content-wrapper {
+                padding: 12rem 1rem 2rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="floating-nav">
+        <div class="nav-brand">
+            <h2>Odyssey ✨</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/squiz">Quizify</a></li>
+            <li><a href="/summarizer">Precis</a></li>
+            <li><a href="/askyourpdf">Odyssey AI</a></li>
+        </ul>
+        <div class="credits-display" style="display: flex; align-items: center; gap: 1rem;">
+            <a href="/credits" style="text-decoration: none;">
+                <div style="padding: 0.5rem 1rem; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-radius: 20px; color: white; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; cursor: pointer;">
+                    <span>⚡</span>
+                    <span><%= typeof credits !== 'undefined' ? credits : '20' %> Credits</span>
+                </div>
+            </a>
+            <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="theme-toggle">
+                <input type="checkbox" id="theme-toggle" />
+                <div class="slider round">
+                    <span class="icon moon">🌙</span>
+                    <span class="icon sun">☀️</span>
+                </div>
+            </label>
+        </div>
+    </nav>
+
+    <main class="content-wrapper">
+        <div class="hero-section">
+            <h1>Welcome to Odyssey</h1>
+            <p>Embark on your academic journey with Odyssey, the ultimate companion that transforms daunting subjects into an epic adventure of discovery and mastery.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="card-icon">📝</span>
+                <h3>Quizify</h3>
+                <p>Transform any text or PDF into engaging multiple-choice quizzes. Perfect for testing your knowledge and preparing for exams.</p>
+                <a href="/squiz" class="btn">Create Quiz</a>
+            </div>
+
+            <div class="feature-card">
+                <span class="card-icon">✍️</span>
+                <h3>Precis</h3>
+                <p>Create an intelligent summary of any PDF to go from information overload to actionable insights in a single click.</p>
+                <a href="/summarizer" class="btn">Summarize</a>
+            </div>
+
+            <div class="feature-card">
+                <span class="card-icon">🤖</span>
+                <h3>Odyssey AI</h3>
+                <p>Odyssey AI is your smart study companion that simplifies learning and helps you master any subject with ease. 🚀</p>
+                <a href="/askyourpdf" class="btn">Chat Now</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-theme');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+
+</body>
+</html>
