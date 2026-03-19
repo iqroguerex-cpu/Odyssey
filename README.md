@@ -189,4 +189,4 @@ For issues or questions, please open an issue on GitHub.
 
 ---
 
-Made with ❤️ by Chinmay Chatradamath
+Made with ❤️ by Chinmay Chatradamath......
