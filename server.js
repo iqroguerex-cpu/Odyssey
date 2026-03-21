@@ -358,7 +358,7 @@ Please provide a clear, comprehensive, and beginner-friendly summary:`;
         const response = await axios.post(
             'https://openrouter.ai/api/v1/chat/completions',
             {
-                model: 'meta-llama/llama-3.2-3b-instruct:free',
+                model: 'stepfun/step-3.5-flash:free',
                 messages: [{ role: 'user', content: prompt }],
                 temperature: 0.5,
                 max_tokens: 30000
