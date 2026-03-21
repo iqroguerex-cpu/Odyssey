@@ -622,7 +622,7 @@ app.post('/chat', async (req, res) => {
         const response = await axios.post(
             'https://openrouter.ai/api/v1/chat/completions',
             {
-                model: 'meta-llama/llama-3.2-3b-instruct:free',
+                model: 'stepfun/step-3.5-flash:free',
                 messages: messages // Send the full conversation history
             },
             {
